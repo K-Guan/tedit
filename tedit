@@ -27,8 +27,12 @@ with NamedTemporaryFile('w+', suffix=suffix) as f:
     # call the editor and let user edit the file
     if sys.platform == 'linux':
         subprocess.call([get_editor(), f.name])
-    else:
+    elif sys.platform == 'nt':
         os.system(f.name)
+    else:
+        print("Sorry, your platform isn't support yet. "
+              "Please run this program on Windows or Linux.")
+        sys.exit(1)
 
     # seek the file to read it
     f.seek(0)
