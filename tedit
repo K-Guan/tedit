@@ -15,7 +15,8 @@ def get_editor():
         print("The editor which we're trying to use doesn't exist.")
         editor = shutil.which(input("Enter the editor you want to use: "))
         print()
-        return editor
+
+    return editor
 
 
 # set the file's suffix if a shell argument is giving
