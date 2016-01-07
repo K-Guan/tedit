@@ -20,7 +20,7 @@ def get_editor():
 
 # set the file's suffix if a shell argument is giving
 # since some editors have code highlight which depends on the suffix
-suffix = '.'+sys.argv[1] if len(sys.argv) > 1 else None
+suffix = '.' + (sys.argv[1] if len(sys.argv) > 1 else 'txt')
 
 with NamedTemporaryFile('w+', suffix=suffix) as f:
     # call the editor and let user edit the file
