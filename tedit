@@ -5,24 +5,29 @@ import shutil
 import subprocess
 from tempfile import NamedTemporaryFile
 
-# set the file's suffix if a shell argument is giving
-# since some editors have code highlight which depends on the suffix
-suffix = '.'+sys.argv[1] if len(sys.argv[1]) > 1 else None
 
-# create a temp file for user edit
-with NamedTemporaryFile('w+', suffix=suffix) as f:
+def get_editor():
     # try to get the default editor via check the environment variables
     editor = shutil.which(os.getenv('VISUAL', os.getenv('EDITOR')))
     while not editor:
         # if the output is None or empty string, let user enter it manually
-        # and here, use shutil.which() to check if the editor is exists or not
+        # and here, use shutil.which() to check if the editor is exists
         print("The editor which we're trying to use doesn't exist.")
-        editor = shutil.which(input("Enter the editor which you want to use: "))
+        editor = shutil.which(input("Enter the editor you want to use: "))
         print()
+        return editor
 
 
+# set the file's suffix if a shell argument is giving
+# since some editors have code highlight which depends on the suffix
+suffix = '.'+sys.argv[1] if len(sys.argv[1]) > 1 else None
+
+with NamedTemporaryFile('w+', suffix=suffix) as f:
     # call the editor and let user edit the file
-    subprocess.call([editor, f.name])
+    if sys.platform == 'linux':
+        subprocess.call([get_editor(), f.name])
+    else:
+        os.system(f.name)
 
     # seek the file to read it
     f.seek(0)
