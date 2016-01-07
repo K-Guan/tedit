@@ -29,7 +29,7 @@ fname = mkstemp(suffix=suffix)[1]
 # call the editor and let user edit the file
 if sys.platform == 'linux':
     subprocess.call([get_editor(), fname])
-elif sys.platform == 'nt':
+elif sys.platform == 'win32':
     os.system(fname)
 else:
     print("Sorry, your platform isn't support yet. "
