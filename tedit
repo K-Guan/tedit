@@ -3,7 +3,7 @@ import os
 import sys
 import shutil
 import subprocess
-from tempfile import NamedTemporaryFile
+from tempfile import mkstemp
 
 
 def get_editor():
@@ -23,20 +23,22 @@ def get_editor():
 # since some editors have code highlight which depends on the suffix
 suffix = '.' + (sys.argv[1] if len(sys.argv) > 1 else 'txt')
 
-with NamedTemporaryFile('w+', suffix=suffix) as f:
-    # call the editor and let user edit the file
-    if sys.platform == 'linux':
-        subprocess.call([get_editor(), f.name])
-    elif sys.platform == 'nt':
-        os.system(f.name)
-    else:
-        print("Sorry, your platform isn't support yet. "
-              "Please run this program on Windows or Linux.")
-        sys.exit(1)
+# create the temp file
+fname = mkstemp(suffix=suffix)[1]
 
-    # seek the file to read it
-    f.seek(0)
+# call the editor and let user edit the file
+if sys.platform == 'linux':
+    subprocess.call([get_editor(), fname])
+elif sys.platform == 'nt':
+    os.system(fname)
+else:
+    print("Sorry, your platform isn't support yet. "
+          "Please run this program on Windows or Linux.")
+    sys.exit(1)
 
+with open(fname) as f:
     # print the file out
     for i in f:
         print(i.rstrip('\n'))
+
+os.remove(fname)
