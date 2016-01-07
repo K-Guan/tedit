@@ -1,0 +1,32 @@
+#!/usr/bin/env python3
+import os
+import sys
+import shutil
+import subprocess
+from tempfile import NamedTemporaryFile
+
+# set the file's suffix if a shell argument is giving
+# since some editors have code highlight which depends on the suffix
+suffix = '.'+sys.argv[1] if len(sys.argv[1]) > 1 else None
+
+# create a temp file for user edit
+with NamedTemporaryFile('w+', suffix=suffix) as f:
+    # try to get the default editor via check the environment variables
+    editor = shutil.which(os.getenv('VISUAL', os.getenv('EDITOR')))
+    while not editor:
+        # if the output is None or empty string, let user enter it manually
+        # and here, use shutil.which() to check if the editor is exists or not
+        print("The editor which we're trying to use doesn't exist.")
+        editor = shutil.which(input("Enter the editor which you want to use: "))
+        print()
+
+
+    # call the editor and let user edit the file
+    subprocess.call([editor, f.name])
+
+    # seek the file to read it
+    f.seek(0)
+
+    # print the file out
+    for i in f:
+        print(i.rstrip('\n'))
