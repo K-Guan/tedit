@@ -24,7 +24,8 @@ def get_editor():
 suffix = '.' + (sys.argv[1] if len(sys.argv) > 1 else 'txt')
 
 # create the temp file
-fname = mkstemp(suffix=suffix)[1]
+fd, fname = mkstemp(suffix='.txt', text=True)
+os.close(fd)
 
 # call the editor and let user edit the file
 if sys.platform == 'linux':
