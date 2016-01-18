@@ -8,13 +8,16 @@ from tempfile import mkstemp
 
 def get_editor():
     # try to get the default editor via check the environment variables
-    editor = shutil.which(os.getenv('VISUAL', os.getenv('EDITOR')))
-    while not editor:
+    editor = os.getenv('VISUAL', os.getenv('EDITOR'))
+
+    while not editor or not shutil.which(editor):
         # if the output is None or empty string, let user enter it manually
         # and here, use shutil.which() to check if the editor is exists
         print("The editor which we're trying to use doesn't exist.")
         editor = shutil.which(input("Enter the editor you want to use: "))
         print()
+    else:
+        editor = shutil.which(editor)
 
     return editor
 
