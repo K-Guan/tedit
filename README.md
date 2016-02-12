@@ -50,3 +50,13 @@ This will create a file which's filename like this:
 Instead of just this:
 
     /tmp/tmps27sm02r
+
+---------------------------------
+
+You can also open the file with a program rather than print the file out now.
+
+To use this feature, you have to set two shell arguments. For example:
+
+    python3 tedit html google-chrome-stable
+
+After you saved the file, tedit will open the file with Google Chrome, and delete it when done.

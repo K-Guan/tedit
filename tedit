@@ -40,9 +40,13 @@ else:
           "Please run this program on Windows or Linux.")
     sys.exit(1)
 
-with open(fname) as f:
-    # print the file out
-    for i in f:
-        print(i.rstrip('\n'))
+if len(sys.argv) > 2:
+    # open the file with `sys.argv[2]`
+    subprocess.call([sys.argv[2], fname])
+else:
+    with open(fname) as f:
+        # print the file out
+        for i in f:
+            print(i.rstrip('\n'))
 
 os.remove(fname)
