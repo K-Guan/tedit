@@ -5,6 +5,7 @@ import shlex
 import shutil
 import argparse
 import subprocess
+from time import sleep
 from tempfile import mkstemp
 
 
@@ -88,4 +89,5 @@ else:
             print(i.rstrip('\n'))
 
 
+sleep(2)
 os.remove(fname)
