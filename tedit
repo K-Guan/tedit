@@ -8,13 +8,13 @@ import subprocess
 from tempfile import mkstemp
 
 
-description = """\
+description = """
 TEdit - Let you edit the stdout
 
 Edit the stdout by your avorite editor,
 or run (open) stdout by a program if you like.
 
-For more details, please check: https://github.com/K-Guan/tedit\
+For more details, please check: https://github.com/K-Guan/tedit
 """
 
 parser = argparse.ArgumentParser(description=description,
@@ -31,6 +31,7 @@ args = parser.parse_args()
 
 
 def get_editor():
+
     if args.editor:
         editor_args = shlex.split(args.editor)
 
@@ -55,17 +56,15 @@ def get_editor():
     return [editor]
 
 
-suffix = '.' + (args.suffix if args.suffix else 'txt')
+suffix = '.' + (args.suffix.strip('.') if args.suffix else 'txt')
 
 
 fd, fname = mkstemp(suffix=suffix)
+os.close(fd)
+
 
 if args.file:
-    with open(args.file) as inf, open(fd, 'w') as outf:
-        outf.write(inf.read())
-
-else:
-    os.close(fd)
+    shutil.copy(args.file, fname)
 
 
 if sys.platform == 'linux':
@@ -82,6 +81,7 @@ else:
 
 if args.program:
     subprocess.call([*shlex.split(args.program), fname])
+
 else:
     with open(fname) as f:
         for i in f:
