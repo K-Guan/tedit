@@ -1,52 +1,91 @@
 #!/usr/bin/env python3
 import os
 import sys
+import shlex
 import shutil
+import argparse
 import subprocess
 from tempfile import mkstemp
 
 
+description = """\
+TEdit - Let you edit the stdout
+
+Edit the stdout by your avorite editor,
+or run (open) stdout by a program if you like.
+
+For more details, please check: https://github.com/K-Guan/tedit\
+"""
+
+parser = argparse.ArgumentParser(description=description,
+                                 formatter_class=argparse.RawTextHelpFormatter)
+
+parser.add_argument("-f", "--file", help="Edit the file as a temporary file")
+parser.add_argument("-s", "--suffix", help="Set the temporary file's suffix")
+parser.add_argument("-p", "--program", help="Program you want to 'run stdout'")
+
+parser.add_argument("-e", "--editor", help="Use anoter editor"
+                    " instead of the system default")
+
+args = parser.parse_args()
+
+
 def get_editor():
-    # try to get the default editor via check the environment variables
+    if args.editor:
+        editor_args = shlex.split(args.editor)
+
+        if not editor_args[0] or not shutil.which(editor_args[0]):
+            print("The editor which we're trying to use doesn't exist.")
+            print("Please check your type, and run this program again.")
+            raise SystemExit(1)
+
+        editor_args[0] = shutil.which(editor_args[0])
+        return editor_args
+
+
     editor = os.getenv('VISUAL', os.getenv('EDITOR'))
 
-    while not editor or not shutil.which(editor):
-        # if the output is None or empty string, let user enter it manually
-        # and here, use shutil.which() to check if the editor is exists
-        print("The editor which we're trying to use doesn't exist.")
-        editor = shutil.which(input("Enter the editor you want to use: "))
-        print()
+    if not editor or not shutil.which(editor):
+        print("There's no default editor on your system or we can't get it.")
+        print("Please set the editor which you want to use by '-e' argument.")
+        raise SystemExit(1)
     else:
         editor = shutil.which(editor)
 
-    return editor
+    return [editor]
 
 
-# set the file's suffix if a shell argument is giving
-# since some editors have code highlight which depends on the suffix
-suffix = '.' + (sys.argv[1] if len(sys.argv) > 1 else 'txt')
+suffix = '.' + (args.suffix if args.suffix else 'txt')
 
-# create the temp file
-fd, fname = mkstemp(suffix=suffix, text=True)
-os.close(fd)
 
-# call the editor and let user edit the file
+fd, fname = mkstemp(suffix=suffix)
+
+if args.file:
+    with open(args.file) as inf, open(fd, 'w') as outf:
+        outf.write(inf.read())
+
+else:
+    os.close(fd)
+
+
 if sys.platform == 'linux':
-    subprocess.call([get_editor(), fname])
+    subprocess.call([*get_editor(), fname])
+
 elif sys.platform == 'win32':
     os.system(fname)
+
 else:
     print("Sorry, your platform isn't support yet. "
           "Please run this program on Windows or Linux.")
     sys.exit(1)
 
-if len(sys.argv) > 2:
-    # open the file with `sys.argv[2]`
-    subprocess.call([sys.argv[2], fname])
+
+if args.program:
+    subprocess.call([*shlex.split(args.program), fname])
 else:
     with open(fname) as f:
-        # print the file out
         for i in f:
             print(i.rstrip('\n'))
+
 
 os.remove(fname)
