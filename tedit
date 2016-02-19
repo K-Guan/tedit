@@ -57,7 +57,10 @@ def get_editor():
     return [editor]
 
 
-suffix = '.' + (args.suffix.strip('.') if args.suffix else 'txt')
+if args.file and not args.suffix:
+    suffix = os.path.splitext(args.file)[1]
+else:
+    suffix = '.' + (args.suffix.strip('.') if args.suffix else 'txt')
 
 
 fd, fname = mkstemp(suffix=suffix)
@@ -82,6 +85,7 @@ else:
 
 if args.program:
     subprocess.call([*shlex.split(args.program), fname])
+    sleep(2)
 
 else:
     with open(fname) as f:
@@ -89,5 +93,4 @@ else:
             print(i.rstrip('\n'))
 
 
-sleep(2)
 os.remove(fname)
