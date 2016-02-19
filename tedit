@@ -39,7 +39,7 @@ def get_editor():
         if not editor_args[0] or not shutil.which(editor_args[0]):
             print("The editor which we're trying to use doesn't exist.")
             print("Please check your type, and run this program again.")
-            raise SystemExit(1)
+            sys.exit(1)
 
         editor_args[0] = shutil.which(editor_args[0])
         return editor_args
@@ -50,7 +50,7 @@ def get_editor():
     if not editor or not shutil.which(editor):
         print("There's no default editor on your system or we can't get it.")
         print("Please set the editor which you want to use by '-e' argument.")
-        raise SystemExit(1)
+        sys.exit(1)
     else:
         editor = shutil.which(editor)
 
@@ -81,6 +81,12 @@ else:
     print("Sorry, your platform isn't support yet. "
           "Please run this program on Windows or Linux.")
     sys.exit(1)
+
+
+if args.file:
+    with open(fname) as f, open(args.file) as of:
+        if f.read() == of.read():
+            sys.exit(0)
 
 
 if args.program:
