@@ -1,51 +1,29 @@
-## TEdit - Let you edit the stdout
+## TEdit - Temporary file Editor
 
 ![python-3.x](https://img.shields.io/badge/python-3.x-green.svg) ![Unix/Windows](https://img.shields.io/badge/platform-unix%2Fwindows-blue.svg)
 
-It's a Python program which lets you edit a temporary file, print it out or run (open) the file by the selected program, and delete it automatically then.
+TEdit is a Python program, you can use it to edit a temporary file, print it out or run (open) the file by the selected program, etc.
 
 
-### Edit the stdout? Why?
-
-Well, sometimes if you want...for example I want edit a code block on [Stack Overflow](https://stackoverflow.com/), and I want use **my editor** (vim). So I need:
-
-1. Open vim edit a file.
-2. Copy the code into my editor.
-3. Edit edit and edit, then save.
-4. Use `cat` command (on Unix/Linux )print the file out; run or the file by a program.
-5. Delete the file.
-
-Yeah, too complex. I really don't want create a file and delete it. Can I just edit the stdout?
-
-
-### How does "tedit" edit the stdout? Pipes?
-
-As I said above, *which lets you edit a temporary file [...]*. So:
-
-1. Create a temporary file use the [`tempfile`](https://docs.python.org/3/library/tempfile.html) module.
-2. Run the editor and edit that temporary file.
-3. Read the file and print the content of it out; run or the file by a program.
-4. That file'll be deleted automatically.
-
-
-### What's the useage of it?
+### Basic usage
 
 First at all, this is a Python 3 project. You mush install Python 3 before run the program.
 
-Then, run the file like:
+Then, just run it like:
 
     python3 tedit
 
-
-It'll creates a temporary file and open it with the default editor of the system, and print the content of that temporary file after you saved it.
+It'll creates a temporary file and opens it use the default editor of the system, and print the content of that temporary file after you saved it.
 
 > **Note:** If you didn't save the file, it'll do nothing.
 
+### Arguments
 
-tedit also accepts some arguments, for example:
+TEdit also accepts some arguments:
 
 ```
-  -f FILE, --file FILE  Edit the file as a temporary file
+  -f FILE, --file FILE  
+                        Edit the file as a temporary file
   -s SUFFIX, --suffix SUFFIX
                         Set the temporary file's suffix
   -p PROGRAM, --program PROGRAM
@@ -54,12 +32,14 @@ tedit also accepts some arguments, for example:
                         Use anoter editor instead of the system default
 ```
 
-- `-f/--file`: tedit will use `FILE`'s content as the temporary file's default content.
+- `-f/--file`: TEdit will uses `FILE`'s content as the temporary file's default content.
+
+  Use it when you're going to edit a file, but you don't want *change* it.
 
 - `-s/--suffix`: Set suffix of the temporary file.
 
-  Use it when your editor has the *highlight auto-enable by check the file's suffix* feature.  
-  `SUFFIX` (you don't need put a dot `.` before the `SUFFIX` yourself, but no matter if you would like to do it) will be the suffix of the temporary file.
+  Use it when your editor has the *auto style highlight by the file's suffix* feature.  
+  `SUFFIX` (you don't need put a dot `.` before the `SUFFIX` yourself) will be the suffix of the temporary file.
 
 - `-p/--program`: Use the selected program to run (open) the file instead of print it out.
 
@@ -72,14 +52,14 @@ tedit also accepts some arguments, for example:
   Arguments of the program are also allowed, for example, open Google Chrome in incognito mode:
 
   ```
-  python3 tedit -s html -p 'google-chrome-stable --incognito'  # don't forgot the quotes!
+  python3 tedit -s html -p 'google-chrome-stable --incognito'  # don't forget the quotes!
   ```
 
 - `-e/--editor`: Set an editor to edit the temporary file.
 
   If you didn't set this, the editor will be the default editor of the system.
 
-  Arguments also allowed. For example:
+  Arguments of the editor are also allowed. For example:
 
   ```
   python3 tedit -e 'vim -u /path/to/vimrc'

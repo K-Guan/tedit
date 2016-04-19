@@ -10,23 +10,24 @@ from tempfile import mkstemp
 
 
 description = """
-TEdit - Let you edit the stdout
+TEdit - Temporary file Editor
 
-Edit the stdout by your avorite editor,
-or run (open) stdout by a program if you like.
-
-For more details, please check: https://github.com/K-Guan/tedit
+Create and edit a temporary file, do whatever you want to do.
 """
 
 parser = argparse.ArgumentParser(description=description,
                                  formatter_class=argparse.RawTextHelpFormatter)
 
-parser.add_argument("-f", "--file", help="Edit the file as a temporary file")
-parser.add_argument("-s", "--suffix", help="Set the temporary file's suffix")
-parser.add_argument("-p", "--program", help="Program you want to 'run stdout'")
-
-parser.add_argument("-e", "--editor", help="Use anoter editor"
-                    " instead of the system default")
+parser.add_argument("-f", "--file", help="Set the temporary file's default\n"
+                    "content as FILE's content.")
+parser.add_argument("-s", "--suffix", help="Use SUFFIX as the temporary\n"
+                    "file's suffix (default is '.txt').")
+parser.add_argument("-p", "--program", help="Use PROGRAM to run the "
+                    "temporary file\n"
+                    "instead of print the file out.")
+parser.add_argument("-e", "--editor", help="Use EDITOR to edit the temporary"
+                    "file\n(will try to finds the system default\n"
+                    "editor if this argument is not giving).")
 
 args = parser.parse_args()
 
@@ -48,7 +49,7 @@ def get_editor():
     editor = os.getenv('VISUAL', os.getenv('EDITOR'))
 
     if not editor or not shutil.which(editor):
-        print("There's no default editor on your system or we can't get it.")
+        print("There's no default editor on your system or we can't find it.")
         print("Please set the editor which you want to use by '-e' argument.")
         sys.exit(1)
     else:
@@ -78,8 +79,7 @@ elif sys.platform == 'win32':
     os.system(fname)
 
 else:
-    print("Sorry, your platform isn't support yet. "
-          "Please run this program on Windows or Linux.")
+    print("Sorry, tedit doesn't support the platform you're using yet")
     sys.exit(1)
 
 
