@@ -7,7 +7,7 @@ TEdit is a Python program, you can use it to edit a temporary file, print it out
 
 ### Basic usage
 
-First at all, this is a Python 3 project. You mush install Python 3 before run the program.
+First at all, this is a Python 3 project. You must install Python 3 before run the program.
 
 Then, just run it like:
 
