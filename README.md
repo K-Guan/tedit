@@ -7,7 +7,7 @@ TEdit is a Python program, you can use it to edit a temporary file, print it out
 
 ### Basic usage
 
-First at all, this is a Python 3 project. You must install Python 3 before run the program.
+First at all, this is a Python 3 project. You must install Python 3 before running the program.
 
 Then, just run it like:
 
@@ -29,7 +29,7 @@ TEdit also accepts some arguments:
   -p PROGRAM, --program PROGRAM
                         Program you want to 'run stdout'
   -e EDITOR, --editor EDITOR
-                        Use anoter editor instead of the system default
+                        Use another editor instead of the system default
 ```
 
 - `-f/--file`: TEdit will uses `FILE`'s content as the temporary file's default content.
@@ -43,7 +43,7 @@ TEdit also accepts some arguments:
 
 - `-p/--program`: Use the selected program to run (open) the file instead of print it out.
 
-  For example, you're editing a HTML source code, and you don't want save it, but want open it with Google Chrome instead, you can simply run tedit like:
+  For example, you're editing a HTML source code, and you don't want to save it, but want open it with Google Chrome instead, you can simply run tedit like:
 
   ```
   python3 tedit -s html -p google-chrome-stable
@@ -57,7 +57,7 @@ TEdit also accepts some arguments:
 
 - `-e/--editor`: Set an editor to edit the temporary file.
 
-  If you didn't set this, the editor will be the default editor of the system.
+  If you didn't set this, the editor will be the default editor for the system.
 
   Arguments of the editor are also allowed. For example:
 
